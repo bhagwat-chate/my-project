@@ -1,2 +1,4 @@
 pandas
 numpy
+pymongo
+scikit-learn==1.3.2

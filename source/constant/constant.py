@@ -13,12 +13,11 @@ APP_HOST = "0.0.0.0"
 APP_PORT = 8080
 
 # Database constant
-MONGODB_URL_KEY = "mongodb+srv://apjaks:dgfsdgdfgzzdfh@cluster0.q06oiaw.mongodb.net/?retryWrites=true&w=majority"
-DATABASE_NAME = 'my-database'
-
+MONGODB_URL_KEY = "mongodb+srv://datawave05:mydataCustChurn@datawave.aignamw.mongodb.net/?retryWrites=true&w=majority"
+DATABASE_NAME = 'db-customer-churn'
 
 # Data ingestion constant
-DATA_INGESTION_COLLECTION_NAME: str = "my-collection"
+DATA_INGESTION_COLLECTION_NAME: str = "telco-customer-churn"
 DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
 DATA_INGESTION_INGESTED_DIR: str = "ingested"
