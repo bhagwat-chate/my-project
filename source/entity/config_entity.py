@@ -1,14 +1,12 @@
 import os
-from datetime import datetime
 from source.constant import constant
 
 
 class TrainingPipelineConfig:
 
-    def __init__(self, timestamp=datetime.now()):
-        timestamp = timestamp.strftime("%m_%d_%Y_%H_%M_%S")
-        self.artifact_dir: str = os.path.join(constant.ARTIFACT_DIR, timestamp)
-        self.timestamp: str = timestamp
+    def __init__(self, global_timestamp):
+        self.artifact_dir: str = os.path.join(constant.ARTIFACT_DIR, str(global_timestamp))
+        self.global_timestamp: str = global_timestamp
         self.target_column: str = constant.TARGET_COLUMN
         self.training_pipeline: str = constant.PIPELINE_NAME
 

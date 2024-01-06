@@ -1,6 +1,9 @@
 import os
+from datetime import datetime
+
 # Common constant
-TARGET_COLUMN = "class"
+TIME_STAMP = datetime.now().strftime('%m_%d_%Y_%H_%M_%S')
+TARGET_COLUMN = "Churn"
 PIPELINE_NAME: str = "training_pipeline"
 ARTIFACT_DIR: str = "artifact"
 FILE_NAME: str = "training_data.csv"
