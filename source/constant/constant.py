@@ -44,6 +44,10 @@ MANDATORY_COLUMN_DATA_TYPE = {'gender': 'object', 'SeniorCitizen': 'object', 'Pa
                               'PaperlessBilling': 'object', 'PaymentMethod': 'object', 'MonthlyCharges': 'float64',
                               'TotalCharges': 'float64', 'Churn': 'object'}
 
+OUTLIER_PARAMS_FILE = "source/ml/outlier_artifact.csv"
+OUTLIER_PARAMS = {}
+
+
 # Data transformation constant
 
 # Model training constant

@@ -52,23 +52,35 @@ class DataIngestion:
             raise e
 
     def clean_data(self, data):
-        # Remove duplicates
-        data = data.drop_duplicates()
+        try:
+            logging.info("start: data cleaning")
 
-        # Remove low-variance columns (with only one unique value)
-        data = data.loc[:, data.nunique() > 1]
+            drop_column = []
+            # Remove duplicates
+            data = data.drop_duplicates()
 
-        # Remove high-cardinality categorical columns (more than 80% unique values)
-        for col in data.select_dtypes(include=['object']).columns:
-            unique_count = data[col].nunique()
-            if unique_count / len(data) > 0.5:
-                data.drop(col, axis=1, inplace=True)
-                print(f"dropped column: {col}")
+            # Remove low-variance columns (with only one unique value)
+            data = data.loc[:, data.nunique() > 1]
 
-        return data
+            # Remove high-cardinality categorical columns (more than 80% unique values)
+            for col in data.select_dtypes(include=['object']).columns:
+                unique_count = data[col].nunique()
+                if unique_count / len(data) > 0.5:
+                    data.drop(col, axis=1, inplace=True)
+                    drop_column.append(col)
+
+            logging.info(f"dropped columns: {drop_column}")
+            logging.info("complete: data cleaning")
+
+            return data
+
+        except ChurnException as e:
+            raise e
 
     def process_data(self, data: DataFrame) -> DataFrame:
         try:
+            logging.info("start: data process")
+
             for col in self.train_config.mandatory_col_list:
                 if col not in data.columns:
                     raise ChurnException(f"Missing mandatory column: {col}")
@@ -77,6 +89,9 @@ class DataIngestion:
                         data[col] = data[col].astype(self.train_config.mandatory_col_data_type[col])
                     except ValueError as e:
                         raise ChurnException(f"Error converting data type for column '{col}': {e}")
+
+            logging.info("complete: data process")
+
             return data  # Return the final dataframe
 
         except ChurnException as e:

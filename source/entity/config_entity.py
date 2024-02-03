@@ -21,8 +21,8 @@ class TrainingPipelineConfig:
 
         self.mandatory_col_list = constant.MANDATORY_COLUMN_LIST
         self.mandatory_col_data_type = constant.MANDATORY_COLUMN_DATA_TYPE
-
-
+        self.outlier_params_file  = constant.OUTLIER_PARAMS_FILE
+        self.outlier_params = constant.OUTLIER_PARAMS
 
 
 
