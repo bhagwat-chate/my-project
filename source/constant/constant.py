@@ -16,7 +16,8 @@ APP_HOST = "0.0.0.0"
 APP_PORT = 8080
 
 # Database constant
-MONGODB_URL_KEY = "mongodb+srv://datawave05:mydataCustChurn@datawave.aignamw.mongodb.net/?retryWrites=true&w=majority"
+# MONGODB_URL_KEY = "mongodb+srv://datawave05:I9JhcMBUfP82kulr@datawave.aignamw.mongodb.net/?retryWrites=true&w=majority"
+MONGODB_URL_KEY = "MONGODB_KEY"
 DATABASE_NAME = 'db-customer-churn'
 
 # Data ingestion constant
@@ -27,6 +28,21 @@ DATA_INGESTION_INGESTED_DIR: str = "ingested"
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
 
 # Data EDA constant
+
+# Data validation
+MANDATORY_COLUMN_LIST = ['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure',
+                       'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity',
+                       'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV',
+                       'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod',
+                       'MonthlyCharges', 'TotalCharges', 'Churn']
+
+MANDATORY_COLUMN_DATA_TYPE = {'gender': 'object', 'SeniorCitizen': 'object', 'Partner': 'object',
+                              'Dependents': 'object', 'tenure': 'int64', 'PhoneService': 'object',
+                              'MultipleLines': 'object', 'InternetService': 'object', 'OnlineSecurity': 'object',
+                              'OnlineBackup': 'object', 'DeviceProtection': 'object', 'TechSupport': 'object',
+                              'StreamingTV': 'object', 'StreamingMovies': 'object', 'Contract': 'object',
+                              'PaperlessBilling': 'object', 'PaymentMethod': 'object', 'MonthlyCharges': 'float64',
+                              'TotalCharges': 'float64', 'Churn': 'object'}
 
 # Data transformation constant
 

@@ -39,7 +39,6 @@ class DataIngestion:
         try:
             train_set, test_set = train_test_split(dataframe, test_size=self.train_config.train_test_split_ratio)
             logging.info("performed train, test split on the dataframe")
-            logging.info("Exited train_test_split of the data_ingestion class")
 
             dir_path = os.path.dirname(self.train_config.training_file_path)
             os.makedirs(dir_path, exist_ok=True)
@@ -52,7 +51,40 @@ class DataIngestion:
         except ChurnException as e:
             raise e
 
+    def clean_data(self, data):
+        # Remove duplicates
+        data = data.drop_duplicates()
+
+        # Remove low-variance columns (with only one unique value)
+        data = data.loc[:, data.nunique() > 1]
+
+        # Remove high-cardinality categorical columns (more than 80% unique values)
+        for col in data.select_dtypes(include=['object']).columns:
+            unique_count = data[col].nunique()
+            if unique_count / len(data) > 0.5:
+                data.drop(col, axis=1, inplace=True)
+                print(f"dropped column: {col}")
+
+        return data
+
+    def process_data(self, data: DataFrame) -> DataFrame:
+        try:
+            for col in self.train_config.mandatory_col_list:
+                if col not in data.columns:
+                    raise ChurnException(f"Missing mandatory column: {col}")
+                if data[col].dtype != self.train_config.mandatory_col_data_type[col]:
+                    try:
+                        data[col] = data[col].astype(self.train_config.mandatory_col_data_type[col])
+                    except ValueError as e:
+                        raise ChurnException(f"Error converting data type for column '{col}': {e}")
+            return data  # Return the final dataframe
+
+        except ChurnException as e:
+            raise e  # Re-raise any exceptions to halt execution
+
     def initiate_data_ingestion(self):
         data = self.export_data_into_feature_store()
+        data = self.process_data(data)
+        data = self.clean_data(data)
         self.split_train_test_split(data)
 

@@ -15,6 +15,15 @@ class TrainingPipelineConfig:
         self.training_file_path: str = os.path.join(self.data_ingestion_dir, constant.DATA_INGESTION_INGESTED_DIR, constant.TRAIN_FILE_NAME)
         self.testing_file_path: str = os.path.join(self.data_ingestion_dir, constant.DATA_INGESTION_INGESTED_DIR, constant.TEST_FILE_NAME)
         self.train_test_split_ratio: float = constant.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
-        self.mongodb_url_key = constant.MONGODB_URL_KEY
+        self.mongodb_url_key = os.environ[constant.MONGODB_URL_KEY]
         self.database_name: str = constant.DATABASE_NAME
         self.collection_name: str = constant.DATA_INGESTION_COLLECTION_NAME
+
+        self.mandatory_col_list = constant.MANDATORY_COLUMN_LIST
+        self.mandatory_col_data_type = constant.MANDATORY_COLUMN_DATA_TYPE
+
+
+
+
+
+
