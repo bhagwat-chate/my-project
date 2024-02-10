@@ -110,6 +110,7 @@ class DataValidation:
 
         except ChurnException as e:
             raise e
+
     def initiate_data_validation(self):
 
         train_data = pd.read_csv(self.utility_config.training_file_path, dtype={'SeniorCitizen': 'object',

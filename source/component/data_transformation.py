@@ -7,6 +7,8 @@ from source.logger import logging
 from source.exception import ChurnException
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+import warnings
+warnings.filterwarnings('ignore')
 
 
 class DataTransformation:
@@ -51,39 +53,33 @@ class DataTransformation:
 
             return data
 
+
         elif type == 'test':
+
             # Read scaling details from CSV
+
             scaling_details = pd.read_csv('source/ml/scaling_details.csv')
 
-            # Initialize MinMaxScaler object
-            scaler = MinMaxScaler()
-
-            # Set the min and max values for scaling
-            scaler.min_ = scaling_details.set_index('Feature')['Scalar_Min']
-            scaler.scale_ = (scaling_details.set_index('Feature')['Scalar_Max'] - scaler.min_)
-
-            # Extract numerical columns
-            # numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
-
-            # Transform the numerical features
-            # scaled_data = scaler.transform(data[numeric_columns])
-
-            counter=0
             for col in data.select_dtypes(include=['float64', 'int64']).columns:
 
-                min: int = scaling_details.loc[]
-                max = scaling_details.set_index('Feature')['Scalar_Max']
+                data[col] = data[col].astype('float64')
 
-                for i in range(len(data)):
-                    print(data.loc[i, col])
-                    print((data.loc[i, col] - min) / (max - min))
-                    data.loc[i, col] = (data.loc[i, col] - min) / (max - min)
+                temp = scaling_details[scaling_details['Feature'] == col]
 
-            # for col in numeric_columns:
-            #     data[data] = scaler.transform(data[col])
+                # Check if temp is empty before accessing its values
 
+                if not temp.empty:
 
+                    min = temp.loc[temp.index[0], 'Scalar_Min']
 
+                    max = temp.loc[temp.index[0], 'Scalar_Max']
+
+                    for i in range(len(data)):
+
+                        if data.loc[i, col] - min != 0.0:
+                            data.loc[i, col] = (data.loc[i, col] - min) / (max - min)
+                else:
+                    print(f"No scaling details found for column '{col}'")
 
             return data
 
