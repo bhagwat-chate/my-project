@@ -2,3 +2,4 @@ venv/
 artifact/
 logs/
 __pycache__
+*.pyc

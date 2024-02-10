@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # Call the setup_logger function to configure the logger
     setup_logger(global_timestamp)
 
-    train_config = TrainingPipelineConfig(global_timestamp)
+    # train_config = TrainingPipelineConfig(global_timestamp)
     # print(train_config.__dict__)
 
     train_pipeline_obj = TrainPipeline(global_timestamp)

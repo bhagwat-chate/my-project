@@ -46,7 +46,7 @@ MANDATORY_COLUMN_DATA_TYPE = {'gender': 'object', 'SeniorCitizen': 'object', 'Pa
 
 OUTLIER_PARAMS_FILE = "source/ml/outlier_artifact.csv"
 OUTLIER_PARAMS = {}
-
+DV_DIR_NAME: str = "data_validtion"
 
 # Data transformation constant
 

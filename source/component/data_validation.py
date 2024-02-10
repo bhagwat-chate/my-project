@@ -1,7 +1,9 @@
+import os
 import pandas as pd
 import numpy as np
 from pandas import DataFrame
 from source.exception import ChurnException
+from source.logger import logging
 
 
 class DataValidation:
@@ -95,6 +97,19 @@ class DataValidation:
 
         return data
 
+    def export_data_file(self, train_data, test_data):
+        try:
+
+            dir_path = os.path.dirname(self.utility_config.dv_train_file_path)
+            os.makedirs(dir_path, exist_ok=True)
+
+            train_data.to_csv(self.utility_config.dv_train_file_path, index=False, header=True)
+            test_data.to_csv(self.utility_config.dv_test_file_path, index=False, header=True)
+
+            logging.info("data validation files exported")
+
+        except ChurnException as e:
+            raise e
     def initiate_data_validation(self):
 
         train_data = pd.read_csv(self.utility_config.training_file_path, dtype={'SeniorCitizen': 'object',
@@ -108,3 +123,4 @@ class DataValidation:
         train_data = self.handle_missing_value(train_data, type='train')
         test_data = self.handle_missing_value(test_data, type='test')
 
+        self.export_data_file(train_data, test_data)

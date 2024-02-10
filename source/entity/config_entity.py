@@ -19,10 +19,13 @@ class TrainingPipelineConfig:
         self.database_name: str = constant.DATABASE_NAME
         self.collection_name: str = constant.DATA_INGESTION_COLLECTION_NAME
 
+        # data validation
         self.mandatory_col_list = constant.MANDATORY_COLUMN_LIST
         self.mandatory_col_data_type = constant.MANDATORY_COLUMN_DATA_TYPE
         self.outlier_params_file  = constant.OUTLIER_PARAMS_FILE
         self.outlier_params = constant.OUTLIER_PARAMS
+        self.dv_train_file_path: str = os.path.join(self.artifact_dir, constant.DV_DIR_NAME, constant.TRAIN_FILE_NAME)
+        self.dv_test_file_path: str = os.path.join(self.artifact_dir, constant.DV_DIR_NAME, constant.TEST_FILE_NAME)
 
 
 
