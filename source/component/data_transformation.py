@@ -1,13 +1,13 @@
 import os
-import pandas as pd
 import os.path
-from pandas import DataFrame
-from pymongo.mongo_client import MongoClient
+import pickle
+import pandas as pd
+import category_encoders as ce
 from source.logger import logging
 from source.exception import ChurnException
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 import warnings
+
 warnings.filterwarnings('ignore')
 
 
@@ -53,7 +53,6 @@ class DataTransformation:
 
             return data
 
-
         elif type == 'test':
 
             # Read scaling details from CSV
@@ -83,11 +82,70 @@ class DataTransformation:
 
             return data
 
-    def initiate_data_transformation(self):
-        train_data = pd.read_csv(self.utility_config.training_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
-        test_data = pd.read_csv(self.utility_config.testing_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
+    def feature_encoding(self, data, target, save_encoder_path=None, load_encoder_path=None):
+        try:
+            # Map binary categorical variables to 0 and 1 directly
+            for col in self.utility_config.binary_class_col:
+                data[col] = data[col].map({'No': 0, 'Yes': 1})
 
-        train_data_scaled = self.min_max_scaling(train_data, type='train')
-        test_data_scaled = self.min_max_scaling(test_data, type='test')
+            # Encode 'gender' column
+            data['gender'] = data['gender'].map({'Male': 1, 'Female': 0})
+
+            if target != '':
+                data[self.utility_config.target_column] = data[self.utility_config.target_column].map({'No': 0, 'Yes': 1})
+
+            if save_encoder_path:
+                # Target encoding for all categorical columns and save encoder
+                encoder = ce.TargetEncoder(cols=self.utility_config.multi_class_col)
+                data_encoded = encoder.fit_transform(data[self.utility_config.multi_class_col], data[self.utility_config.target_column])
+
+                # Save encoder object using pickle
+                with open(save_encoder_path, 'wb') as f:
+                    pickle.dump(encoder, f)
+
+            if load_encoder_path:
+                # Load encoder object
+                with open(load_encoder_path, 'rb') as f:
+                    encoder = pickle.load(f)
+
+                # Transform categorical columns using loaded encoder
+                data_encoded = encoder.transform(data[self.utility_config.multi_class_col])
+
+            # Merge encoded columns with original DataFrame
+            data = pd.concat([data.drop(columns=self.utility_config.multi_class_col), data_encoded], axis=1)
+
+            # Display DataFrame
+            print(data)
+
+            return data
+
+        except ChurnException as e:
+            raise e
+
+    def export_data_file(self, train_data, test_data):
+        try:
+
+            dir_path = os.path.dirname(self.utility_config.dt_train_file_path)
+            os.makedirs(dir_path, exist_ok=True)
+
+            train_data.to_csv(self.utility_config.dt_train_file_path, index=False, header=True)
+            test_data.to_csv(self.utility_config.dt_test_file_path, index=False, header=True)
+
+            logging.info("data transformation files exported")
+
+        except ChurnException as e:
+            raise e
+
+    def initiate_data_transformation(self):
+        train_data = pd.read_csv(self.utility_config.dv_train_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
+        test_data = pd.read_csv(self.utility_config.dv_test_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
+
+        train_data = self.min_max_scaling(train_data, type='train')
+        test_data = self.min_max_scaling(test_data, type='test')
+
+        train_data = self.feature_encoding(train_data, target='Churn', save_encoder_path=self.utility_config.multi_class_encoder)
+        test_data = self.feature_encoding(test_data, target='', load_encoder_path=self.utility_config.multi_class_encoder)
+
+        self.export_data_file(train_data, test_data)
 
         print('done')

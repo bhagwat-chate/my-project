@@ -27,6 +27,14 @@ class TrainingPipelineConfig:
         self.dv_train_file_path: str = os.path.join(self.artifact_dir, constant.DV_DIR_NAME, constant.TRAIN_FILE_NAME)
         self.dv_test_file_path: str = os.path.join(self.artifact_dir, constant.DV_DIR_NAME, constant.TEST_FILE_NAME)
 
+        # data transformation
+        self.multi_class_encoder = constant.MULTI_CLASS_ENCODER
+        self.multi_class_col = constant.MULTI_CLASS_COL
+        self.binary_class_col = constant.BINARY_CLASS_COL
+        self.dt_train_file_path: str = os.path.join(self.artifact_dir, constant.DT_DIR_NAME, constant.TRAIN_FILE_NAME)
+        self.dt_test_file_path: str = os.path.join(self.artifact_dir, constant.DT_DIR_NAME, constant.TEST_FILE_NAME)
+
+
 
 
 

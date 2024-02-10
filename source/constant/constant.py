@@ -30,12 +30,12 @@ DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
 # Data EDA constant
 
 # Data validation
+DV_DIR_NAME: str = "data_validtion"
 MANDATORY_COLUMN_LIST = ['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure',
                        'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity',
                        'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV',
                        'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod',
                        'MonthlyCharges', 'TotalCharges', 'Churn']
-
 MANDATORY_COLUMN_DATA_TYPE = {'gender': 'object', 'SeniorCitizen': 'object', 'Partner': 'object',
                               'Dependents': 'object', 'tenure': 'int64', 'PhoneService': 'object',
                               'MultipleLines': 'object', 'InternetService': 'object', 'OnlineSecurity': 'object',
@@ -43,12 +43,15 @@ MANDATORY_COLUMN_DATA_TYPE = {'gender': 'object', 'SeniorCitizen': 'object', 'Pa
                               'StreamingTV': 'object', 'StreamingMovies': 'object', 'Contract': 'object',
                               'PaperlessBilling': 'object', 'PaymentMethod': 'object', 'MonthlyCharges': 'float64',
                               'TotalCharges': 'float64', 'Churn': 'object'}
-
 OUTLIER_PARAMS_FILE = "source/ml/outlier_artifact.csv"
 OUTLIER_PARAMS = {}
-DV_DIR_NAME: str = "data_validtion"
+
 
 # Data transformation constant
+DT_DIR_NAME: str = "data_transformation"
+MULTI_CLASS_ENCODER = "source/ml/multi_class_encoder.pkl"
+MULTI_CLASS_COL = ['MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaymentMethod']
+BINARY_CLASS_COL = ['Partner', 'Dependents', 'PhoneService', 'PaperlessBilling']
 
 # Model training constant
 
