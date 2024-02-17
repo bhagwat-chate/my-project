@@ -34,7 +34,7 @@ class TrainingPipelineConfig:
         self.dt_train_file_path: str = os.path.join(self.artifact_dir, constant.DT_DIR_NAME, constant.TRAIN_FILE_NAME)
         self.dt_test_file_path: str = os.path.join(self.artifact_dir, constant.DT_DIR_NAME, constant.TEST_FILE_NAME)
 
-
+        self.model_path = constant.MODEL_PATH
 
 
 

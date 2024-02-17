@@ -14,3 +14,4 @@ six==1.16.0
 statsmodels==0.14.1
 threadpoolctl==3.2.0
 tzdata==2023.4
+xgboost==2.0.3

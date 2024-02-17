@@ -114,9 +114,6 @@ class DataTransformation:
             # Merge encoded columns with original DataFrame
             data = pd.concat([data.drop(columns=self.utility_config.multi_class_col), data_encoded], axis=1)
 
-            # Display DataFrame
-            print(data)
-
             return data
 
         except ChurnException as e:
@@ -144,7 +141,7 @@ class DataTransformation:
         test_data = self.min_max_scaling(test_data, type='test')
 
         train_data = self.feature_encoding(train_data, target='Churn', save_encoder_path=self.utility_config.multi_class_encoder)
-        test_data = self.feature_encoding(test_data, target='', load_encoder_path=self.utility_config.multi_class_encoder)
+        test_data = self.feature_encoding(test_data, target='Churn', load_encoder_path=self.utility_config.multi_class_encoder)
 
         self.export_data_file(train_data, test_data)
 

@@ -45,7 +45,7 @@ class DataIngestion:
 
             logging.info("Exporting train and test file path")
 
-            test_set.drop('Churn', axis=1, inplace=True)
+            # test_set.drop('Churn', axis=1, inplace=True)
 
             train_set.to_csv(self.train_config.training_file_path, index=False, header=True)
             test_set.to_csv(self.train_config.testing_file_path, index=False, header=True)

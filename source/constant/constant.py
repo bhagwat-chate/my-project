@@ -54,6 +54,7 @@ MULTI_CLASS_COL = ['MultipleLines', 'InternetService', 'OnlineSecurity', 'Online
 BINARY_CLASS_COL = ['Partner', 'Dependents', 'PhoneService', 'PaperlessBilling']
 
 # Model training constant
+MODEL_PATH = "source/ml/ml_artifact"
 
 # Model evaluation constant
 

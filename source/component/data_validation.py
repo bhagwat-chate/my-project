@@ -71,7 +71,6 @@ class DataValidation:
             # Save outlier parameters to CSV during training
             outlier_params_df = pd.DataFrame(self.outlier_params)
             outlier_params_df.to_csv(self.utility_config.outlier_params_file, index=False)
-            print("Outlier parameters saved to:", self.utility_config.outlier_params_file)
 
         else:
             # Load outlier parameters from CSV during test or prediction
