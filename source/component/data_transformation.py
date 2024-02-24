@@ -2,6 +2,7 @@ import os
 import os.path
 import pickle
 import pandas as pd
+from imblearn.over_sampling import SMOTE
 import category_encoders as ce
 from source.logger import logging
 from source.exception import ChurnException
@@ -119,6 +120,25 @@ class DataTransformation:
         except ChurnException as e:
             raise e
 
+    def oversample_smote(self, data):
+        try:
+            # Separate features and target variable
+            X = data.drop(columns=[self.utility_config.target_column])
+            y = data[self.utility_config.target_column]
+
+            # Apply SMOTE
+            smote = SMOTE()
+            X_resampled, y_resampled = smote.fit_resample(X, y)
+
+            # Combine resampled features and target variable into a new DataFrame
+            resampled_data = pd.concat([pd.DataFrame(X_resampled, columns=X.columns),
+                                        pd.DataFrame(y_resampled, columns=[self.utility_config.target_column])], axis=1)
+
+            return resampled_data
+
+        except ChurnException as e:
+            raise e
+
     def export_data_file(self, train_data, test_data):
         try:
 
@@ -143,6 +163,8 @@ class DataTransformation:
         train_data = self.feature_encoding(train_data, target='Churn', save_encoder_path=self.utility_config.multi_class_encoder)
         test_data = self.feature_encoding(test_data, target='Churn', load_encoder_path=self.utility_config.multi_class_encoder)
 
+        train_data = self.oversample_smote(train_data)
+
         self.export_data_file(train_data, test_data)
 
-        print('done')
+
