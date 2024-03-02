@@ -3,6 +3,7 @@ import pandas as pd
 import os.path
 from pandas import DataFrame
 from pymongo.mongo_client import MongoClient
+from source.utility.utility import export_csv_file
 from source.logger import logging
 from source.exception import ChurnException
 from sklearn.model_selection import train_test_split
@@ -25,6 +26,7 @@ class DataIngestion:
             # Connect to MongoDB and retrieve data from the specified collection
             client = MongoClient(self.utility_config.mongodb_url_key)
             database = client[self.utility_config.database_name]
+
             collection = database[collection_name]
             cursor = collection.find()
             data = pd.DataFrame(list(cursor))
@@ -85,11 +87,21 @@ class DataIngestion:
         except ChurnException as e:
             raise e
 
-    def process_data(self, data: DataFrame) -> DataFrame:
+    def process_data(self, data: DataFrame, key) -> DataFrame:
         try:
             logging.info("start: data process")
 
-            for col in self.utility_config.dv_mandatory_col_list:
+            if key == 'train':
+                mandatory_cols = self.utility_config.dv_mandatory_col_list
+            else:
+                mandatory_cols = self.utility_config.dv_mandatory_col_list.copy()
+                self.utility_config.col_drop_in_clean.append(self.utility_config.target_column)
+
+                for col in self.utility_config.col_drop_in_clean:
+                    if col in mandatory_cols:
+                        mandatory_cols.remove(col)
+
+            for col in mandatory_cols:
                 if col not in data.columns:
                     raise ChurnException(f"Missing mandatory column: {col}")
                 if data[col].dtype != self.utility_config.dv_mandatory_col_data_type[col]:
@@ -100,20 +112,26 @@ class DataIngestion:
 
             logging.info("complete: data process")
 
-            return data  # Return the final dataframe
+            return data  # Return the final DataFrame
 
         except ChurnException as e:
-
             raise e  # Re-raise any exceptions to halt execution
 
     def initiate_data_ingestion(self, key):
         try:
 
             logging.info("START: data ingestion")
+
             data = self.export_data_into_feature_store(key)
-            data = self.process_data(data)
-            data = self.clean_data(data)
-            self.split_train_test_split(data)
+            data = self.process_data(data, key)
+
+            if key == 'train':
+                data = self.clean_data(data)
+                self.split_train_test_split(data)
+
+            if key == 'predict':
+                export_csv_file(data, self.utility_config.predict_file, self.utility_config.predict_file_path)
+
             logging.info("end: data ingestion")
 
         except ChurnException as e:

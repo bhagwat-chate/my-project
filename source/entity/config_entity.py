@@ -20,6 +20,7 @@ class PipelineUtilityConfig:
         self.mongodb_url_key = os.environ[constant.MONGODB_URL_KEY]
         self.database_name: str = constant.DATABASE_NAME
         self.train_di_collection_name: str = constant.DI_TRAIN_COLLECTION_NAME
+        self.col_drop_in_clean = constant.COL_DROP_IN_CLEAN
 
         # data validation
         self.dv_mandatory_col_list = constant.MANDATORY_COLUMN_LIST
@@ -40,11 +41,13 @@ class PipelineUtilityConfig:
         self.mt_model_path = constant.MODEL_PATH
         self.mt_final_model = constant.FINAL_MODEL
 
-
         # PREDICTION CONSTANT
         # data ingestion
         self.predict_di_dir_name: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DI_DIR_NAME)
-        self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.PREDICT_FILE_NAME)
+        self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.PREDICT_FILE_NAME)
+        self.predict_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_INGESTED_DIR)
+        self.predict_file = constant.PREDICT_FILE
+
         self.predict_di_collection_name = constant.PREDICT_DI_COLLECTION_NAME
 
 

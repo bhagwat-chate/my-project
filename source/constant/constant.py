@@ -25,6 +25,7 @@ DI_DIR_NAME: str = "data_ingestion"
 DI_FEATURE_STORE_DIR: str = "feature_store"
 DI_INGESTED_DIR: str = "ingested"
 DI_TRAIN_TEST_SPLIT_RATIO: float = 0.2
+COL_DROP_IN_CLEAN = ['_id', 'customerID']
 
 # Data EDA constant
 
@@ -64,3 +65,4 @@ FINAL_MODEL = "source/ml/final_model"
 PREDICT_PIPELINE_NAME: str = "predict"
 PREDICT_FILE_NAME: str = "prediction_data.csv"
 PREDICT_DI_COLLECTION_NAME: str = "predict-telco-customer-churn"
+PREDICT_FILE = "predict.csv"
