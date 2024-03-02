@@ -3,7 +3,7 @@ import logging
 from source.constant.constant import ARTIFACT_DIR
 
 
-def setup_logger(global_timestamp):
+def setup_log_timestamp(global_timestamp):
 
     # Use the global timestamp variable
     LOG_FILE = f"{global_timestamp}.log"
@@ -18,3 +18,4 @@ def setup_logger(global_timestamp):
         format="[ %(asctime)s ] %(lineno)d %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
+

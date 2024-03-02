@@ -86,7 +86,7 @@ class DataTransformation:
     def feature_encoding(self, data, target, save_encoder_path=None, load_encoder_path=None):
         try:
             # Map binary categorical variables to 0 and 1 directly
-            for col in self.utility_config.binary_class_col:
+            for col in self.utility_config.dt_binary_class_col:
                 data[col] = data[col].map({'No': 0, 'Yes': 1})
 
             # Encode 'gender' column
@@ -97,8 +97,8 @@ class DataTransformation:
 
             if save_encoder_path:
                 # Target encoding for all categorical columns and save encoder
-                encoder = ce.TargetEncoder(cols=self.utility_config.multi_class_col)
-                data_encoded = encoder.fit_transform(data[self.utility_config.multi_class_col], data[self.utility_config.target_column])
+                encoder = ce.TargetEncoder(cols=self.utility_config.dt_multi_class_col)
+                data_encoded = encoder.fit_transform(data[self.utility_config.dt_multi_class_col], data[self.utility_config.target_column])
 
                 # Save encoder object using pickle
                 with open(save_encoder_path, 'wb') as f:
@@ -110,10 +110,10 @@ class DataTransformation:
                     encoder = pickle.load(f)
 
                 # Transform categorical columns using loaded encoder
-                data_encoded = encoder.transform(data[self.utility_config.multi_class_col])
+                data_encoded = encoder.transform(data[self.utility_config.dt_multi_class_col])
 
             # Merge encoded columns with original DataFrame
-            data = pd.concat([data.drop(columns=self.utility_config.multi_class_col), data_encoded], axis=1)
+            data = pd.concat([data.drop(columns=self.utility_config.dt_multi_class_col), data_encoded], axis=1)
 
             return data
 
@@ -160,8 +160,8 @@ class DataTransformation:
         train_data = self.min_max_scaling(train_data, type='train')
         test_data = self.min_max_scaling(test_data, type='test')
 
-        train_data = self.feature_encoding(train_data, target='Churn', save_encoder_path=self.utility_config.multi_class_encoder)
-        test_data = self.feature_encoding(test_data, target='Churn', load_encoder_path=self.utility_config.multi_class_encoder)
+        train_data = self.feature_encoding(train_data, target='Churn', save_encoder_path=self.utility_config.dt_multi_class_encoder)
+        test_data = self.feature_encoding(test_data, target='Churn', load_encoder_path=self.utility_config.dt_multi_class_encoder)
 
         train_data = self.oversample_smote(train_data)
 

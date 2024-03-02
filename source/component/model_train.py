@@ -110,7 +110,7 @@ class ModelTrain:
                 model.fit(x_train, y_train)
                 y_pred = model.predict(x_test)
 
-                with open(f"{self.utility_config.model_path}/{name}.pkl", 'wb') as f:
+                with open(f"{self.utility_config.mt_model_path}/{name}.pkl", 'wb') as f:
                     pickle.dump(model, f)
 
                 self.log_and_update_metrics(y_test, y_pred, name)
@@ -155,7 +155,7 @@ class ModelTrain:
             test_score = final_model.score(x_test, y_test)
             logging.info(f"Final model ({final_model_name}) test score: {test_score}")
 
-            with open(f"{self.utility_config.final_model}/{final_model_name}.pkl", 'wb') as f:
+            with open(f"{self.utility_config.mt_final_model}/{final_model_name}.pkl", 'wb') as f:
                 pickle.dump(final_model, f)
 
         except ChurnException as e:
@@ -167,7 +167,7 @@ class ModelTrain:
             test_data = pd.read_csv(self.utility_config.dt_test_file_path, dtype={'TotalCharges': 'float64'})
 
             self.model_training(train_data, test_data)
-            self.model_evaluation_report.to_csv(self.utility_config.model_path + '/model_evaluation_report.csv', index=False)
+            self.model_evaluation_report.to_csv(self.utility_config.mt_model_path + '/model_evaluation_report.csv', index=False)
 
             final_model_name = self.finalize_model()
 

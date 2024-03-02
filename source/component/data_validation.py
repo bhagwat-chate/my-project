@@ -70,11 +70,11 @@ class DataValidation:
 
             # Save outlier parameters to CSV during training
             outlier_params_df = pd.DataFrame(self.outlier_params)
-            outlier_params_df.to_csv(self.utility_config.outlier_params_file, index=False)
+            outlier_params_df.to_csv(self.utility_config.dv_outlier_params_file, index=False)
 
         else:
             # Load outlier parameters from CSV during test or prediction
-            outlier_params_df = pd.read_csv(self.utility_config.outlier_params_file)
+            outlier_params_df = pd.read_csv(self.utility_config.dv_outlier_params_file)
             self.outlier_params = outlier_params_df.to_dict(orient='list')
 
             for column_name in data.select_dtypes(include=['number']).columns:
@@ -112,9 +112,9 @@ class DataValidation:
 
     def initiate_data_validation(self):
 
-        train_data = pd.read_csv(self.utility_config.training_file_path, dtype={'SeniorCitizen': 'object',
+        train_data = pd.read_csv(self.utility_config.train_file_path, dtype={'SeniorCitizen': 'object',
                                                                                 'TotalCharges': 'float64'})
-        test_data = pd.read_csv(self.utility_config.testing_file_path, dtype={'SeniorCitizen': 'object',
+        test_data = pd.read_csv(self.utility_config.test_file_path, dtype={'SeniorCitizen': 'object',
                                                                               'TotalCharges': 'float64'})
 
         train_data = self.outlier_detection_and_handle(train_data, type='train')

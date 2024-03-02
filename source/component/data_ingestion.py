@@ -1,4 +1,4 @@
-import os
+import os, sys
 import pandas as pd
 import os.path
 from pandas import DataFrame
@@ -9,25 +9,31 @@ from sklearn.model_selection import train_test_split
 
 
 class DataIngestion:
-    def __init__(self, train_config):
-        self.train_config = train_config
+    def __init__(self, utility_config):
+        self.utility_config = utility_config
 
-    def export_data_into_feature_store(self):
+    def export_data_into_feature_store(self, key):
         try:
-            database = self.train_config.database_name
-            collection = self.train_config.collection_name
-            mongodb_url_key = self.train_config.mongodb_url_key
+            # Determine collection name and feature store file path based on the key
+            if key == 'train':
+                collection_name = self.utility_config.train_di_collection_name
+                feature_store_file_path = self.utility_config.train_di_feature_store_file_path
+            else:
+                collection_name = self.utility_config.predict_di_collection_name
+                feature_store_file_path = self.utility_config.predict_di_feature_store_file_path
 
-            client = MongoClient(mongodb_url_key)
-            database = client[database]
-            collection = database[collection]
-
+            # Connect to MongoDB and retrieve data from the specified collection
+            client = MongoClient(self.utility_config.mongodb_url_key)
+            database = client[self.utility_config.database_name]
+            collection = database[collection_name]
             cursor = collection.find()
             data = pd.DataFrame(list(cursor))
 
-            feature_store_file_path = self.train_config.feature_store_file_path
+            # Ensure directory for feature store file exists
             dir_path = os.path.dirname(feature_store_file_path)
             os.makedirs(dir_path, exist_ok=True)
+
+            # Export data to CSV file
             data.to_csv(feature_store_file_path, index=False, header=True)
 
             return data
@@ -37,18 +43,18 @@ class DataIngestion:
 
     def split_train_test_split(self, dataframe: DataFrame) -> None:
         try:
-            train_set, test_set = train_test_split(dataframe, test_size=self.train_config.train_test_split_ratio)
+            train_set, test_set = train_test_split(dataframe, test_size=self.utility_config.train_test_split_ratio)
             logging.info("performed train, test split on the dataframe")
 
-            dir_path = os.path.dirname(self.train_config.training_file_path)
+            dir_path = os.path.dirname(self.utility_config.train_file_path)
             os.makedirs(dir_path, exist_ok=True)
 
             logging.info("Exporting train and test file path")
 
             # test_set.drop('Churn', axis=1, inplace=True)
 
-            train_set.to_csv(self.train_config.training_file_path, index=False, header=True)
-            test_set.to_csv(self.train_config.testing_file_path, index=False, header=True)
+            train_set.to_csv(self.utility_config.train_file_path, index=False, header=True)
+            test_set.to_csv(self.utility_config.test_file_path, index=False, header=True)
 
         except ChurnException as e:
             raise e
@@ -83,12 +89,12 @@ class DataIngestion:
         try:
             logging.info("start: data process")
 
-            for col in self.train_config.mandatory_col_list:
+            for col in self.utility_config.dv_mandatory_col_list:
                 if col not in data.columns:
                     raise ChurnException(f"Missing mandatory column: {col}")
-                if data[col].dtype != self.train_config.mandatory_col_data_type[col]:
+                if data[col].dtype != self.utility_config.dv_mandatory_col_data_type[col]:
                     try:
-                        data[col] = data[col].astype(self.train_config.mandatory_col_data_type[col])
+                        data[col] = data[col].astype(self.utility_config.dv_mandatory_col_data_type[col])
                     except ValueError as e:
                         raise ChurnException(f"Error converting data type for column '{col}': {e}")
 
@@ -97,11 +103,18 @@ class DataIngestion:
             return data  # Return the final dataframe
 
         except ChurnException as e:
+
             raise e  # Re-raise any exceptions to halt execution
 
-    def initiate_data_ingestion(self):
-        data = self.export_data_into_feature_store()
-        data = self.process_data(data)
-        data = self.clean_data(data)
-        self.split_train_test_split(data)
+    def initiate_data_ingestion(self, key):
+        try:
 
+            logging.info("START: data ingestion")
+            data = self.export_data_into_feature_store(key)
+            data = self.process_data(data)
+            data = self.clean_data(data)
+            self.split_train_test_split(data)
+            logging.info("end: data ingestion")
+
+        except ChurnException as e:
+            raise e

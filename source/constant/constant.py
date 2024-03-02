@@ -4,9 +4,9 @@ from datetime import datetime
 # Common constant
 TIME_STAMP = datetime.now().strftime('%m_%d_%Y_%H_%M_%S')
 TARGET_COLUMN = "Churn"
-PIPELINE_NAME: str = "training_pipeline"
+TRAIN_PIPELINE_NAME: str = "train"
 ARTIFACT_DIR: str = "artifact"
-FILE_NAME: str = "training_data.csv"
+TRAINING_FILE_NAME: str = "training_data.csv"
 
 TRAIN_FILE_NAME: str = "train.csv"
 TEST_FILE_NAME: str = "test.csv"
@@ -16,16 +16,15 @@ APP_HOST = "0.0.0.0"
 APP_PORT = 8080
 
 # Database constant
-# MONGODB_URL_KEY = "mongodb+srv://datawave05:I9JhcMBUfP82kulr@datawave.aignamw.mongodb.net/?retryWrites=true&w=majority"
 MONGODB_URL_KEY = "MONGODB_KEY"
 DATABASE_NAME = 'db-customer-churn'
 
 # Data ingestion constant
-DATA_INGESTION_COLLECTION_NAME: str = "telco-customer-churn"
-DATA_INGESTION_DIR_NAME: str = "data_ingestion"
-DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
-DATA_INGESTION_INGESTED_DIR: str = "ingested"
-DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
+DI_TRAIN_COLLECTION_NAME: str = "telco-customer-churn"
+DI_DIR_NAME: str = "data_ingestion"
+DI_FEATURE_STORE_DIR: str = "feature_store"
+DI_INGESTED_DIR: str = "ingested"
+DI_TRAIN_TEST_SPLIT_RATIO: float = 0.2
 
 # Data EDA constant
 
@@ -61,3 +60,7 @@ FINAL_MODEL = "source/ml/final_model"
 
 # Model push constant
 
+###############################
+PREDICT_PIPELINE_NAME: str = "predict"
+PREDICT_FILE_NAME: str = "prediction_data.csv"
+PREDICT_DI_COLLECTION_NAME: str = "predict-telco-customer-churn"
