@@ -4,3 +4,4 @@ logs/
 __pycache__
 *.pyc
 source/ml/ml_artifact
+.idea
