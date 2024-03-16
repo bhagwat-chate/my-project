@@ -153,7 +153,7 @@ class DataTransformation:
         except ChurnException as e:
             raise e
 
-    def initiate_data_transformation(self):
+    def initiate_data_transformation(self, key):
         train_data = pd.read_csv(self.utility_config.dv_train_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
         test_data = pd.read_csv(self.utility_config.dv_test_file_path, dtype={'SeniorCitizen': 'object', 'TotalCharges': 'float64'})
 

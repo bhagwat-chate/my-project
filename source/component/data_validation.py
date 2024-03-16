@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 from pandas import DataFrame
+from source.utility.utility import export_csv_file, import_csv_file
 from source.exception import ChurnException
 from source.logger import logging
 
@@ -12,9 +13,9 @@ class DataValidation:
         self.utility_config = utility_config
         self.outlier_params = {}
 
-    def handle_missing_value(self, data, type):
+    def handle_missing_value(self, data, key):
         try:
-            if type == 'train':
+            if key == 'train':
                 # Impute numerical columns with median
                 numerical_columns = data.select_dtypes(include=['number']).columns
                 numerical_imputation_values = data[numerical_columns].median()
@@ -46,9 +47,9 @@ class DataValidation:
         except ChurnException as e:
             raise e
 
-    def outlier_detection_and_handle(self, data, type):
+    def outlier_detection_and_handle(self, data, key):
 
-        if type=='train':
+        if key == 'train':
             for column_name in data.select_dtypes(include=['number']).columns:
                 # Calculate the IQR (Interquartile Range)
                 Q1 = data[column_name].quantile(0.25)
@@ -72,7 +73,8 @@ class DataValidation:
             outlier_params_df = pd.DataFrame(self.outlier_params)
             outlier_params_df.to_csv(self.utility_config.dv_outlier_params_file, index=False)
 
-        else:
+        elif key in ['predict', 'test']:
+
             # Load outlier parameters from CSV during test or prediction
             outlier_params_df = pd.read_csv(self.utility_config.dv_outlier_params_file)
             self.outlier_params = outlier_params_df.to_dict(orient='list')
@@ -110,17 +112,25 @@ class DataValidation:
         except ChurnException as e:
             raise e
 
-    def initiate_data_validation(self):
+    def initiate_data_validation(self, key):
 
-        train_data = pd.read_csv(self.utility_config.train_file_path, dtype={'SeniorCitizen': 'object',
-                                                                                'TotalCharges': 'float64'})
-        test_data = pd.read_csv(self.utility_config.test_file_path, dtype={'SeniorCitizen': 'object',
-                                                                              'TotalCharges': 'float64'})
+        if key == 'train':
 
-        train_data = self.outlier_detection_and_handle(train_data, type='train')
-        test_data = self.outlier_detection_and_handle(test_data, type='test')
+            train_data = import_csv_file(self.utility_config.train_file_name, self.utility_config.di_train_file_path)
+            test_data = import_csv_file(self.utility_config.test_file_name, self.utility_config.di_test_file_path)
 
-        train_data = self.handle_missing_value(train_data, type='train')
-        test_data = self.handle_missing_value(test_data, type='test')
+            train_data = self.outlier_detection_and_handle(train_data, key)
+            test_data = self.outlier_detection_and_handle(test_data, key)
 
-        self.export_data_file(train_data, test_data)
+            train_data = self.handle_missing_value(train_data, key)
+            test_data = self.handle_missing_value(test_data, key)
+
+            self.export_data_file(train_data, test_data)
+
+        else:
+            predict_data = import_csv_file(self.utility_config.predict_file_name, self.utility_config.predict_di_file_path)
+            predict_data = self.outlier_detection_and_handle(predict_data, key)
+            predict_data = self.handle_missing_value(predict_data, key)
+
+            export_csv_file(predict_data, self.utility_config.predict_file_name, self.utility_config.predict_dv_file_path)
+            print('complete: predict data validation')

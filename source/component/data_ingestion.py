@@ -43,43 +43,41 @@ class DataIngestion:
         except ChurnException as e:
             raise e
 
-    def split_train_test_split(self, dataframe: DataFrame) -> None:
+    def split_train_test_split(self, dataframe: DataFrame):
         try:
-            train_set, test_set = train_test_split(dataframe, test_size=self.utility_config.train_test_split_ratio)
-            logging.info("performed train, test split on the dataframe")
 
-            dir_path = os.path.dirname(self.utility_config.train_file_path)
-            os.makedirs(dir_path, exist_ok=True)
+            train_data, test_data = train_test_split(dataframe, test_size=self.utility_config.train_test_split_ratio)
 
-            logging.info("Exporting train and test file path")
-
-            # test_set.drop('Churn', axis=1, inplace=True)
-
-            train_set.to_csv(self.utility_config.train_file_path, index=False, header=True)
-            test_set.to_csv(self.utility_config.test_file_path, index=False, header=True)
+            return train_data, test_data
 
         except ChurnException as e:
             raise e
 
-    def clean_data(self, data):
+    def clean_data(self, data, key):
         try:
             logging.info("start: data cleaning")
 
-            drop_column = []
-            # Remove duplicates
-            data = data.drop_duplicates()
+            if key == 'train':
+                drop_column = []
+                # Remove duplicates
+                data = data.drop_duplicates()
 
-            # Remove low-variance columns (with only one unique value)
-            data = data.loc[:, data.nunique() > 1]
+                # Remove low-variance columns (with only one unique value)
+                data = data.loc[:, data.nunique() > 1]
 
-            # Remove high-cardinality categorical columns (more than 80% unique values)
-            for col in data.select_dtypes(include=['object']).columns:
-                unique_count = data[col].nunique()
-                if unique_count / len(data) > 0.5:
-                    data.drop(col, axis=1, inplace=True)
-                    drop_column.append(col)
+                # Remove high-cardinality categorical columns (more than 80% unique values)
+                for col in data.select_dtypes(include=['object']).columns:
+                    unique_count = data[col].nunique()
+                    if unique_count / len(data) > 0.5:
+                        data.drop(col, axis=1, inplace=True)
+                        drop_column.append(col)
 
-            logging.info(f"dropped columns: {drop_column}")
+                logging.info(f"data clean: dropped columns: {drop_column}")
+
+            elif key == 'predict':
+                # Remove duplicates
+                data = data.drop_duplicates()
+
             logging.info("complete: data cleaning")
 
             return data
@@ -110,6 +108,9 @@ class DataIngestion:
                     except ValueError as e:
                         raise ChurnException(f"Error converting data type for column '{col}': {e}")
 
+            # drop if any extra columns present
+            data = data[mandatory_cols]
+
             logging.info("complete: data process")
 
             return data  # Return the final DataFrame
@@ -120,17 +121,21 @@ class DataIngestion:
     def initiate_data_ingestion(self, key):
         try:
 
-            logging.info("START: data ingestion")
+            logging.info("start: data ingestion")
 
             data = self.export_data_into_feature_store(key)
             data = self.process_data(data, key)
+            data = self.clean_data(data, key)
 
             if key == 'train':
-                data = self.clean_data(data)
-                self.split_train_test_split(data)
+
+                train_data, test_data = self.split_train_test_split(data)
+
+                export_csv_file(train_data, self.utility_config.train_file_name, self.utility_config.di_train_file_path)
+                export_csv_file(test_data, self.utility_config.test_file_name, self.utility_config.di_test_file_path)
 
             if key == 'predict':
-                export_csv_file(data, self.utility_config.predict_file, self.utility_config.predict_file_path)
+                export_csv_file(data, self.utility_config.predict_file_name, self.utility_config.predict_di_file_path)
 
             logging.info("end: data ingestion")
 

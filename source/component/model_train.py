@@ -36,8 +36,8 @@ def tune_hyperparameters(x_train, y_train):
 
         param_grid = {
             'loss': ['deviance', 'exponential'],
-            'learning_rate': [0.01, 0.1, 0.5],
-            'n_estimators': [50, 100]
+            'learning_rate': [0.01], # [0.01, 0.1, 0.5]
+            'n_estimators': [5, 10] # [50, 100]
         }
 
         # Create F1 scorer

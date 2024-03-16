@@ -11,11 +11,14 @@ class PipelineUtilityConfig:
         self.global_timestamp: str = global_timestamp
         self.target_column: str = constant.TARGET_COLUMN
 
+        self.train_file_name = constant.TRAIN_FILE_NAME
+        self.test_file_name = constant.TEST_FILE_NAME
+
         # data ingestion
         self.train_di_dir_name: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DI_DIR_NAME)
         self.train_di_feature_store_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.TRAINING_FILE_NAME)
-        self.train_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR, constant.TRAIN_FILE_NAME)
-        self.test_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR, constant.TEST_FILE_NAME)
+        self.di_train_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR)
+        self.di_test_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR)
         self.train_test_split_ratio: float = constant.DI_TRAIN_TEST_SPLIT_RATIO
         self.mongodb_url_key = os.environ[constant.MONGODB_URL_KEY]
         self.database_name: str = constant.DATABASE_NAME
@@ -45,11 +48,12 @@ class PipelineUtilityConfig:
         # data ingestion
         self.predict_di_dir_name: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DI_DIR_NAME)
         self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.PREDICT_FILE_NAME)
-        self.predict_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_INGESTED_DIR)
-        self.predict_file = constant.PREDICT_FILE
-
+        self.predict_di_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_INGESTED_DIR)
         self.predict_di_collection_name = constant.PREDICT_DI_COLLECTION_NAME
 
+        # data validation
+        self.predict_dv_file_path: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DV_DIR_NAME)
+        self.predict_file_name = constant.PREDICT_FILE
 
 
 

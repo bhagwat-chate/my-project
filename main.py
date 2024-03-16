@@ -18,9 +18,9 @@ if __name__ == '__main__':
     # train_config = PipelineUtilityConfig(global_timestamp)
     # print(train_config.__dict__)
 
-    # pipeline_obj.run_training_pipeline()
-    # print("model training complete")
-    # logging.info("END: MODEL TRAINING")
+    pipeline_obj.run_training_pipeline()
+    print("model training complete")
+    logging.info("END: MODEL TRAINING")
 
 
     logging.info("START: MODEL PREDICTION")

@@ -5,8 +5,6 @@ W
 'source/component/data_transformation.py,5\3\53fd7b338bad6cdaa8ab0612e8ecbc163270ade2
 O
 source/component/model_train.py,4\a\4a537babc8e5a5fc6cb997bcbaafb5a3874fb005
-T
-$source/pipeline/training_pipeline.py,0\4\04aebc29c90eeb6ecc89ab31793b40854ecaab50
 N
 source/entity/config_entity.py,b\b\bb712747e51bfb18fcb055eb0f6c1084b2f20c81
 @

@@ -1,3 +1,4 @@
+import pandas as pd
 import os
 import logging
 from datetime import datetime
@@ -24,3 +25,11 @@ def export_csv_file(df, filename, file_path):
     except ChurnException as e:
         raise e
 
+
+def import_csv_file(filename, filepath):
+    try:
+        if os.path.exists(filepath):
+            return pd.read_csv(filepath +'\\'+ filename)
+
+    except ChurnException as e:
+        raise e

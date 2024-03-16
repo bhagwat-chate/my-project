@@ -3,7 +3,5 @@ qpython:S3776"TRefactor this function to reduce its Cognitive Complexity fro
 Hpython:S5806I"+Rename this variable; it shadows a builtin.(•Ï°ûÿÿÿÿ
 Hpython:S5806K"+Rename this variable; it shadows a builtin.(Ê—„óşÿÿÿÿ
 Rpython:S1244O":Do not perform equality checks with floating point values.(Ñ«úÁ
-upython:S2737y"XAdd logic to this except clause or eliminate it and rethrow the exception automatically.(ÏõîËûÿÿÿÿ
 ypython:S117ƒ"\Rename this local variable "X_resampled" to match the regular expression ^[_a-z][a-z0-9_]*$.(İÎ’Ïùÿÿÿÿ
-vpython:S2737Œ"XAdd logic to this except clause or eliminate it and rethrow the exception automatically.(ÏõîËûÿÿÿÿ
-vpython:S2737š"XAdd logic to this except clause or eliminate it and rethrow the exception automatically.(ÏõîËûÿÿÿÿ
+Ppython:S1172œ"+Remove the unused function parameter "key".(‰Êµ´üÿÿÿÿ8ó„‚¯ä1

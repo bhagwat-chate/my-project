@@ -1,9 +1,9 @@
 ,imputation_value
-tenure,29.0
-MonthlyCharges,74.525
-TotalCharges,1502.65
+SeniorCitizen,0.0
+tenure,28.0
+MonthlyCharges,70.15
+TotalCharges,1412.65
 gender,Male
-SeniorCitizen,0
 Partner,No
 Dependents,No
 PhoneService,Yes
@@ -18,3 +18,4 @@ StreamingMovies,Yes
 Contract,Month-to-month
 PaperlessBilling,Yes
 PaymentMethod,Electronic check
+Churn,No
