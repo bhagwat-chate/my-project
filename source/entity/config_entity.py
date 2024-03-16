@@ -30,15 +30,15 @@ class PipelineUtilityConfig:
         self.dv_mandatory_col_data_type = constant.MANDATORY_COLUMN_DATA_TYPE
         self.dv_outlier_params_file = constant.OUTLIER_PARAMS_FILE
         self.dv_outlier_params = constant.OUTLIER_PARAMS
-        self.dv_train_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DV_DIR_NAME, constant.TRAIN_FILE_NAME)
-        self.dv_test_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DV_DIR_NAME, constant.TEST_FILE_NAME)
+        self.dv_train_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DV_DIR_NAME)
+        self.dv_test_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DV_DIR_NAME)
 
         # data transformation
         self.dt_multi_class_encoder = constant.MULTI_CLASS_ENCODER
         self.dt_multi_class_col = constant.MULTI_CLASS_COL
         self.dt_binary_class_col = constant.BINARY_CLASS_COL
-        self.dt_train_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DT_DIR_NAME, constant.TRAIN_FILE_NAME)
-        self.dt_test_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DT_DIR_NAME, constant.TEST_FILE_NAME)
+        self.dt_train_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DT_DIR_NAME)
+        self.dt_test_file_path: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DT_DIR_NAME)
 
         # model train and evaluate
         self.mt_model_path = constant.MODEL_PATH
@@ -55,5 +55,7 @@ class PipelineUtilityConfig:
         self.predict_dv_file_path: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DV_DIR_NAME)
         self.predict_file_name = constant.PREDICT_FILE
 
+        # data transformation
+        self.predict_dt_file_path: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DT_DIR_NAME)
 
 

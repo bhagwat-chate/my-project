@@ -125,7 +125,9 @@ class DataValidation:
             train_data = self.handle_missing_value(train_data, key)
             test_data = self.handle_missing_value(test_data, key)
 
-            self.export_data_file(train_data, test_data)
+            # self.export_data_file(train_data, test_data)
+            export_csv_file(train_data, self.utility_config.train_file_name, self.utility_config.dv_train_file_path)
+            export_csv_file(test_data, self.utility_config.test_file_name, self.utility_config.dv_test_file_path)
 
         else:
             predict_data = import_csv_file(self.utility_config.predict_file_name, self.utility_config.predict_di_file_path)

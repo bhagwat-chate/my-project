@@ -1,4 +1,5 @@
 Feature,Scalar_Min,Scalar_Max
+SeniorCitizen,0.0,0.6931471805599453
 tenure,0.0,72.0
-MonthlyCharges,18.25,118.75
-TotalCharges,18.8,8684.8
+MonthlyCharges,18.25,117.8
+TotalCharges,9.069444787271305,8468.2

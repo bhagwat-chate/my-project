@@ -28,3 +28,5 @@ K
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 M
 source/ml/scaling_details.csv,c\7\c759ae1ccb0386759d4fb5443354cee5a16f2f1d
+Q
+!source/component/model_predict.py,4\3\43aa9d3f972448f4cc3eee6cc58ad86901e65938

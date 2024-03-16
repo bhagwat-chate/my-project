@@ -30,9 +30,9 @@ class DataPipeline:
         self.start_data_ingestion('train')
         self.start_data_validation('train')
         self.start_data_transformation('train')
-        self.start_model_training('train')
+        # self.start_model_training('train')
 
     def run_prediction_pipeline(self):
         self.start_data_ingestion('predict')
         self.start_data_validation('predict')
-        # self.start_data_transformation('predict')
+        self.start_data_transformation('predict')
