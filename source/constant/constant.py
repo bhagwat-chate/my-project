@@ -63,6 +63,6 @@ FINAL_MODEL = "source/ml/final_model"
 
 ###############################
 PREDICT_PIPELINE_NAME: str = "predict"
-PREDICT_FILE_NAME: str = "prediction_data.csv"
+PREDICT_FEA_STORE_FILE_NAME: str = "prediction_data.csv"
 PREDICT_DI_COLLECTION_NAME: str = "predict-telco-customer-churn"
 PREDICT_FILE = "predict.csv"

@@ -11,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
+from source.utility.utility import import_csv_file
 
 
 def tune_hyperparameters(x_train, y_train):
@@ -163,8 +164,8 @@ class ModelTrain:
 
     def initiate_model_training(self):
         try:
-            train_data = pd.read_csv(self.utility_config.dt_train_file_path, dtype={'TotalCharges': 'float64'})
-            test_data = pd.read_csv(self.utility_config.dt_test_file_path, dtype={'TotalCharges': 'float64'})
+            train_data = import_csv_file(self.utility_config.train_file_name, self.utility_config.dt_train_file_path)
+            test_data = import_csv_file(self.utility_config.test_file_name, self.utility_config.dt_test_file_path)
 
             self.model_training(train_data, test_data)
             self.model_evaluation_report.to_csv(self.utility_config.mt_model_path + '/model_evaluation_report.csv', index=False)
@@ -176,3 +177,4 @@ class ModelTrain:
             print('done')
         except ChurnException as e:
             raise e
+

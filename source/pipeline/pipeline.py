@@ -3,6 +3,7 @@ from source.component.data_ingestion import DataIngestion
 from source.component.data_validation import DataValidation
 from source.component.data_transformation import DataTransformation
 from source.component.model_train import ModelTrain
+from source.component.model_predict import ModelPredict
 
 
 class DataPipeline:
@@ -22,17 +23,23 @@ class DataPipeline:
         data_transformation_obj = DataTransformation(self.utility_config)
         data_transformation_obj.initiate_data_transformation(key)
 
-    def start_model_training(self, key):
+    def start_model_training(self):
         model_training_obj = ModelTrain(self.utility_config)
         model_training_obj.initiate_model_training()
+
+    def start_model_prediction(self):
+        model_predict_obj = ModelPredict(self.utility_config)
+        model_predict_obj.initiate_model_prediction()
+
 
     def run_training_pipeline(self):
         self.start_data_ingestion('train')
         self.start_data_validation('train')
         self.start_data_transformation('train')
-        # self.start_model_training('train')
+        self.start_model_training()
 
     def run_prediction_pipeline(self):
         self.start_data_ingestion('predict')
         self.start_data_validation('predict')
         self.start_data_transformation('predict')
+        self.start_model_prediction()

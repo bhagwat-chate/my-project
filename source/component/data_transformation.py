@@ -172,5 +172,3 @@ class DataTransformation:
 
             logging.info('complete: predict data transformation')
 
-
-

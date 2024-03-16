@@ -15,16 +15,13 @@ if __name__ == '__main__':
     pipeline_obj = DataPipeline(global_timestamp)
 
     # logging.info("START: MODEL TRAINING")
-    train_config = PipelineUtilityConfig(global_timestamp)
-    print(train_config.__dict__)
+    # train_config = PipelineUtilityConfig(global_timestamp)
+    # print(train_config.__dict__)
 
     pipeline_obj.run_training_pipeline()
     print("model training complete")
     logging.info("END: MODEL TRAINING")
 
-
     logging.info("START: MODEL PREDICTION")
-
     pipeline_obj.run_prediction_pipeline()
-
-    logging.info("END: MODEL PREDICTION")
+    print("END: MODEL PREDICTION")

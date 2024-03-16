@@ -17,6 +17,8 @@ class PipelineUtilityConfig:
         # data ingestion
         self.train_di_dir_name: str = os.path.join(self.artifact_dir, constant.TRAIN_PIPELINE_NAME, constant.DI_DIR_NAME)
         self.train_di_feature_store_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.TRAINING_FILE_NAME)
+        self.train_di_feature_store_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_FEATURE_STORE_DIR)
+        self.di_feature_store_file_name = constant.TRAINING_FILE_NAME
         self.di_train_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR)
         self.di_test_file_path: str = os.path.join(self.train_di_dir_name, constant.DI_INGESTED_DIR)
         self.train_test_split_ratio: float = constant.DI_TRAIN_TEST_SPLIT_RATIO
@@ -47,7 +49,9 @@ class PipelineUtilityConfig:
         # PREDICTION CONSTANT
         # data ingestion
         self.predict_di_dir_name: str = os.path.join(self.artifact_dir, constant.PREDICT_PIPELINE_NAME, constant.DI_DIR_NAME)
-        self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.PREDICT_FILE_NAME)
+        # self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_FEATURE_STORE_DIR, constant.PREDICT_FEA_STORE_FILE_NAME)
+        self.predict_di_feature_store_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_FEATURE_STORE_DIR)
+        self.predict_di_feature_store_file_name = constant.PREDICT_FEA_STORE_FILE_NAME
         self.predict_di_file_path: str = os.path.join(self.predict_di_dir_name, constant.DI_INGESTED_DIR)
         self.predict_di_collection_name = constant.PREDICT_DI_COLLECTION_NAME
 

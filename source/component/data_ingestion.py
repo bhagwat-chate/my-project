@@ -19,9 +19,12 @@ class DataIngestion:
             if key == 'train':
                 collection_name = self.utility_config.train_di_collection_name
                 feature_store_file_path = self.utility_config.train_di_feature_store_file_path
+                feature_store_file_name = self.utility_config.di_feature_store_file_name
+
             else:
                 collection_name = self.utility_config.predict_di_collection_name
                 feature_store_file_path = self.utility_config.predict_di_feature_store_file_path
+                feature_store_file_name = self.utility_config.predict_di_feature_store_file_name
 
             # Connect to MongoDB and retrieve data from the specified collection
             client = MongoClient(self.utility_config.mongodb_url_key)
@@ -31,12 +34,7 @@ class DataIngestion:
             cursor = collection.find()
             data = pd.DataFrame(list(cursor))
 
-            # Ensure directory for feature store file exists
-            dir_path = os.path.dirname(feature_store_file_path)
-            os.makedirs(dir_path, exist_ok=True)
-
-            # Export data to CSV file
-            data.to_csv(feature_store_file_path, index=False, header=True)
+            export_csv_file(data, feature_store_file_name, feature_store_file_path)
 
             return data
 
@@ -72,9 +70,12 @@ class DataIngestion:
                         data.drop(col, axis=1, inplace=True)
                         drop_column.append(col)
 
+                # Remove duplicates
+                data = data.drop_duplicates()
+
                 logging.info(f"data clean: dropped columns: {drop_column}")
 
-            elif key == 'predict':
+            elif key == 'train':
                 # Remove duplicates
                 data = data.drop_duplicates()
 
@@ -109,7 +110,8 @@ class DataIngestion:
                         raise ChurnException(f"Error converting data type for column '{col}': {e}")
 
             # drop if any extra columns present
-            data = data[mandatory_cols]
+            if key == 'predict':
+                data = data[mandatory_cols]
 
             logging.info("complete: data process")
 
